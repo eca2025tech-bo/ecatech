@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ECA TECH | Neon Store</title>
+  <meta name="description" content="ECA TECH: mantenimiento de CPU, servicio técnico, cotizaciones, envíos y tienda con carrito. Estilo neon futurista."/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#05070d;          /* negro profundo */
+      --panel:#0b0f1f;       /* panel oscuro */
+      --text:#e8f0ff;        /* texto principal */
+      --muted:#8ba0c9;       /* texto secundario */
+      --neon-1:#00e5ff;      /* cian neon */
+      --neon-2:#7a5cff;      /* violeta neon */
+      --neon-3:#2bff95;      /* verde neon */
+      --accent:#00d1ff;      /* acento */
+      --danger:#ff4d6d;      /* rojo */
+      --ok:#2bff95;          /* verde */
+      --radius:18px;
+      --shadow:0 20px 60px rgba(0,0,0,.55);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:Outfit,system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Helvetica,Arial,sans-serif;background:radial-gradient(1000px 500px at 20% -10%, rgba(122,92,255,.25), transparent 60%), radial-gradient(900px 600px at 120% 30%, rgba(0,229,255,.25), transparent 60%), radial-gradient(800px 500px at -10% 120%, rgba(43,255,149,.2), transparent 60%), var(--bg);color:var(--text);}
+    a{color:inherit}
+    .container{max-width:1200px;margin-inline:auto;padding:24px}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .btn{appearance:none;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px 16px;background:linear-gradient(135deg, rgba(0,229,255,.15), rgba(122,92,255,.15));color:var(--text);cursor:pointer;font-weight:700;letter-spacing:.2px;transition:.22s transform, .22s box-shadow}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 0 0 3px rgba(0,229,255,.25), 0 0 20px rgba(122,92,255,.35)}
+    .btn.primary{background:linear-gradient(135deg, var(--neon-1), var(--neon-2));color:#001018;border:0}
+    .btn.ghost{background:transparent}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:12px;color:var(--muted)}
+    header{position:sticky;top:0;z-index:40;background:rgba(5,7,13,.6);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 24px}
+
+    /* LOGO: ahora texto claro "ECA TECH" con glow */
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{font-weight:900;letter-spacing:2px;font-size:28px;display:flex;align-items:center;gap:6px}
+    .logo .eca{background:linear-gradient(90deg,#1a46ff 0%,#00e5ff 35%,#2bff95 70%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(0,229,255,.35),0 0 30px rgba(122,92,255,.25)}
+    .logo .tech{color:#fff;text-shadow:0 0 14px rgba(255,255,255,.35)}
+
+    .contact{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:center}
+    .hero .title{font-size:42px;line-height:1.05;margin:0 0 8px;text-shadow:0 0 20px rgba(0,229,255,.25)}
+    .hero .subtitle{color:var(--muted);margin:0 0 16px}
+
+    /* Sections */
+    .section-title{display:flex;justify-content:space-between;align-items:end;margin:8px 0 14px}
+    .section-title h2{margin:0;font-size:26px}
+
+    /* Grid */
+    .grid{display:grid;gap:16px}
+    .grid.cols-3{grid-template-columns:repeat(3, 1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2, 1fr)}
+    @media (max-width: 980px){.hero{grid-template-columns:1fr}.grid.cols-3{grid-template-columns:1fr 1fr}}
+    @media (max-width: 640px){.grid.cols-3,.grid.cols-2{grid-template-columns:1fr}}
+
+    /* Product/Service card */
+    .product{padding:16px;position:relative}
+    .thumb{aspect-ratio:16/10;border-radius:14px;background:#070d22;display:grid;place-items:center;border:1px solid rgba(255,255,255,.06);margin-bottom:10px;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.15) contrast(1.05)}
+    .product h4{margin:6px 0 8px}
+    .meta{font-size:12px;color:var(--muted)}
+    .price{font-weight:900;font-size:18px}
+    .pill{border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}
+    .kpis{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+    /* Drawer Cart */
+    .drawer{position:fixed;right:-430px;top:0;height:100%;width:430px;max-width:92vw;background:#081026;border-left:1px solid rgba(255,255,255,.1);box-shadow:var(--shadow);transition:.25s right;z-index:50;display:flex;flex-direction:column}
+    .drawer.open{right:0}
+    .drawer .head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .drawer .content{padding:16px;display:flex;flex-direction:column;gap:12px;overflow:auto}
+    .cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:10px;border:1px solid rgba(255,255,255,.06);border-radius:12px;background:#0e1533}
+    .qty{display:flex;gap:6px;align-items:center}
+    .qty button{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:#121a3a;color:#fff}
+    .summary{margin-top:auto;border-top:1px dashed rgba(255,255,255,.2);padding-top:12px}
+    .summary .row{display:flex;justify-content:space-between;margin:6px 0;color:var(--muted)}
+    .summary .total{color:var(--text);font-weight:900;font-size:18px}
+
+    /* Forms & modal */
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .fields input, .fields textarea, .fields select{width:100%;padding:12px;border-radius:10px;background:#0a1028;border:1px solid rgba(255,255,255,.12);color:var(--text)}
+    .fields textarea{grid-column:1/-1;min-height:90px;resize:vertical}
+    dialog{border:0;border-radius:18px;background:#0e1530;color:var(--text);padding:0;box-shadow:var(--shadow);width:min(560px,92vw)}
+    dialog::backdrop{background:rgba(0,0,0,.55)}
+    .modal-header{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center}
+    .modal-body{padding:18px}
+    .modal-footer{display:flex;gap:10px;justify-content:flex-end;padding:12px 18px;border-top:1px solid rgba(255,255,255,.08)}
+
+    /* Floating WhatsApp */
+    .whats{position:fixed;right:18px;bottom:18px;background:linear-gradient(135deg,var(--ok),#09c372);color:#00180d;border-radius:999px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.45);font-weight:800;z-index:60}
+
+    /* Footer */
+    footer{border-top:1px solid rgba(255,255,255,.08);margin-top:28px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:10px;text-align:left}
+    th{color:#cfe0ff}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav container">
+      <!-- LOGO actualizado visible "ECA TECH" -->
+      <div class="logo" aria-label="ECA TECH">
+        <div class="mark"><span class="eca">ECA</span> <span class="tech">TECH</span></div>
+        <span class="badge" id="slogan">Limpieza, armado y soporte profesional de computadoras</span>
+      </div>
+      <div class="contact">
+        <span class="badge">📞 <strong id="telShown">60576075</strong></span>
+        <span class="badge">✉️ <strong id="mailShown">ventas@ecatech.bo</strong></span>
+        <button id="openCart" class="btn ghost">🛒 <span id="cartCount" class="badge" style="margin-left:8px">0</span></button>
+        <button id="openCheckout" class="btn primary">Finalizar compra</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container" id="app">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="glass" style="padding:22px">
+        <h1 class="title">Computadoras y Soporte <span style="color:var(--neon-1)">ECA TECH</span></h1>
+        <p class="subtitle">Mantenimiento de CPU, servicio técnico, cotizaciones a medida y envíos a todo Bolivia. Estilo <b>neon</b>, rendimiento real.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <a class="btn" href="#mantenimiento">Mantenimiento CPU</a>
+          <a class="btn" href="#cotizacion">Cotización</a>
+          <a class="btn" href="#servicio">Servicio técnico</a>
+          <a class="btn" href="#envios">Envíos</a>
+          <a class="btn primary" href="#tienda">Ir a la tienda</a>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+          <a class="badge" href="https://www.tiktok.com/@ECA_tech" target="_blank">TikTok: @ECA_tech</a>
+          <a class="badge" href="https://instagram.com/eca2025tech" target="_blank">Instagram: @eca2025tech</a>
+        </div>
+      </div>
+      <div class="glass" style="padding:22px">
+        <div class="fields">
+          <input id="q" placeholder="Buscar: i5, RTX 4060, 16GB RAM…"/>
+          <select id="category">
+            <option value="">Todas las categorías</option>
+            <option>Notebook</option>
+            <option>Desktop</option>
+          </select>
+          <select id="brand">
+            <option value="">Todas las marcas</option>
+            <option>Lenovo</option>
+            <option>HP</option>
+            <option>Acer</option>
+            <option>ASUS</option>
+            <option>ECA</option>
+          </select>
+          <select id="sort">
+            <option value="featured">Destacados</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="name-asc">Nombre A→Z</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <span class="pill chip" data-tag="gaming">Gaming</span>
+          <span class="pill chip" data-tag="office">Office</span>
+          <span class="pill chip" data-tag="creator">Creadores</span>
+          <span class="pill chip" data-tag="estudiante">Estudiante</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS TOP con IMÁGENES -->
+    <section id="mantenimiento" class="glass" style="padding:22px;margin-top:18px">
+      <div class="section-title"><h2>Servicios Top</h2><span class="badge">Calidad garantizada • Repuestos premium</span></div>
+      <div class="grid cols-3">
+        <div class="glass product">
+          <div class="thumb"><img alt="Mantenimiento de CPU" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='%2300e5ff'/><stop offset='1' stop-color='%237a5cff'/></linearGradient></defs><rect width='100%' height='100%' fill='%23070d22'/><g fill='none' stroke='url(%23g)' stroke-width='12' stroke-linecap='round'><circle cx='180' cy='250' r='110'/><line x1='140' y1='130' x2='100' y2='90'/><line x1='220' y1='130' x2='260' y2='90'/></g><g fill='%232bff95' opacity='.9'><rect x='470' y='150' rx='14' ry='14' width='220' height='180'/><rect x='495' y='175' width='170' height='16' rx='8'/><rect x='495' y='205' width='140' height='16' rx='8'/><rect x='495' y='235' width='110' height='16' rx='8'/></g></svg>"/></div>
+          <h4>Mantenimiento de CPU</h4>
+          <div class="meta">Limpieza profunda interna/externa, cambio de pasta térmica, optimización de temperaturas y rendimiento.</div>
+          <div class="kpis"><span class="pill">24h</span><span class="pill">Garantía 30d</span><span class="pill">Desde 120 Bs</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="price">120–220 Bs</div>
+            <button class="btn primary" data-service="Mant. CPU">Agendar</button>
+          </div>
+        </div>
+        <div class="glass product" id="servicio">
+          <div class="thumb"><img alt="Servicio técnico" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><rect width='100%' height='100%' fill='%23070d22'/><g stroke='%2300e5ff' stroke-width='10' fill='none'><rect x='80' y='120' width='280' height='220' rx='18'/><line x1='100' y1='160' x2='340' y2='160'/><line x1='100' y1='200' x2='260' y2='200'/></g><g fill='%237a5cff'><circle cx='560' cy='220' r='80'/><rect x='540' y='180' width='40' height='80' rx='6'/><rect x='520' y='200' width='80' height='40' rx='6'/></g></svg>"/></div>
+          <h4>Servicio Técnico</h4>
+          <div class="meta">Diagnóstico, reparación, formateo/instalación de SO, upgrade de RAM/SSD, drivers y optimización.</div>
+          <div class="kpis"><span class="pill">Diagnóstico 0 Bs*</span><span class="pill">Recolección opcional</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="price">Desde 80 Bs</div>
+            <button class="btn primary" data-service="Servicio Técnico">Solicitar</button>
+          </div>
+        </div>
+        <div class="glass product" id="envios">
+          <div class="thumb"><img alt="Envíos" src="data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><rect width='100%' height='100%' fill='%23070d22'/><g fill='%232bff95'><rect x='140' y='220' width='520' height='120' rx='18'/><circle cx='220' cy='360' r='28'/><circle cx='560' cy='360' r='28'/></g><g stroke='%2300e5ff' stroke-width='10'><line x1='160' y1='240' x2='620' y2='240'/></g></svg>"/></div>
+          <h4>Envíos y Entregas</h4>
+          <div class="meta">Entrega local 24–48h. Envíos a nivel nacional por courier. Embalaje seguro + guía de seguimiento.</div>
+          <div class="kpis"><span class="pill">La Paz & Bolivia</span><span class="pill">Pago contra entrega*</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="price">Desde 20 Bs</div>
+            <button class="btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Ver políticas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla resumida precios -->
+      <div class="glass" style="margin-top:16px;padding:12px">
+        <h3 style="margin:8px 0 10px">Servicios y precios (referencial Bolivia)</h3>
+        <div style="overflow:auto">
+          <table>
+            <thead><tr><th>Servicio</th><th>Descripción</th><th>Precio sugerido</th></tr></thead>
+            <tbody>
+              <tr><td>Limpieza interna y externa</td><td>Eliminación de polvo, ventiladores, carcasa y puertos</td><td>80–100 Bs</td></tr>
+              <tr><td>Limpieza + Optimización</td><td>Limpieza + mejora de arranque y rendimiento</td><td>120 Bs</td></tr>
+              <tr><td>Instalación de SO + Programas</td><td>Windows + Office + antivirus + drivers</td><td>150 Bs</td></tr>
+              <tr><td>Servicio completo</td><td>Todo lo anterior en un paquete</td><td>200 Bs</td></tr>
+              <tr><td>Mantenimiento preventivo</td><td>Revisión rápida y limpieza ligera</td><td>70 Bs</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIENDA con imágenes -->
+    <section id="tienda" class="glass" style="padding:22px;margin-top:18px">
+      <div class="section-title"><h2>Tienda</h2><span id="count" class="badge">0 resultados</span></div>
+      <div id="productList" class="grid cols-3"></div>
+    </section>
+
+    <!-- COTIZACIÓN PERSONALIZADA -->
+    <section id="cotizacion" class="glass" style="padding:22px;margin-top:18px">
+      <div class="section-title"><h2>🧠 Cotización personalizada</h2><span class="badge">Responde y te sugerimos la mejor PC</span></div>
+      <form id="quoteForm" class="fields">
+        <select required name="uso">
+          <option value="">¿Para qué la quieres?</option>
+          <option>Office/Estudio</option>
+          <option>Gaming 1080p</option>
+          <option>Gaming 1440p/4K</option>
+          <option>Edición/Render</option>
+          <option>Programación/Data</option>
+        </select>
+        <select required name="presupuesto">
+          <option value="">Presupuesto aprox. (USD)</option>
+          <option><800</option>
+          <option>800–1200</option>
+          <option>1200–1800</option>
+          <option>1800–2500</option>
+          <option>>2500</option>
+        </select>
+        <input required name="nombre" placeholder="Tu nombre"/>
+        <input required name="telefono" placeholder="Teléfono"/>
+        <textarea name="extras" placeholder="Preferencias (marca, tamaño, RGB, etc.)"></textarea>
+        <div style="grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn" type="reset">Limpiar</button>
+          <button class="btn primary" type="submit">Enviar por WhatsApp</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- POLÍTICAS / FAQ -->
+    <section class="glass" style="padding:22px;margin-top:18px">
+      <div class="section-title"><h2>FAQ y políticas</h2><span class="badge">Transparencia total</span></div>
+      <div class="grid cols-2">
+        <div>
+          <h4>Garantía</h4>
+          <p class="meta">Productos: 12 meses según fabricante. Servicio técnico: 30 días en mano de obra.</p>
+          <h4>Pagos</h4>
+          <p class="meta">Efectivo, transferencia, QR y contra entrega (La Paz). Facturación disponible.</p>
+        </div>
+        <div>
+          <h4>Envíos</h4>
+          <p class="meta">24–48h en La Paz; nacional según courier. Embalaje con sellos de seguridad.</p>
+          <h4>Soporte</h4>
+          <p class="meta">WhatsApp <b>+591 60576075</b> y correo <b>ventas@ecatech.bo</b>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Drawer Carrito -->
+  <aside class="drawer" id="drawer">
+    <div class="head">
+      <div style="font-weight:800">Tu carrito</div>
+      <button class="btn ghost" id="closeCart">✖</button>
+    </div>
+    <div class="content" id="cartItems"></div>
+    <div class="content">
+      <div class="summary">
+        <div class="row"><span>Subtotal</span><span id="subtotal">$0</span></div>
+        <div class="row"><span>Envío</span><span id="shipping">$0</span></div>
+        <div class="row"><span>Descuento</span><span id="discount">$0</span></div>
+        <div class="row total"><span>Total</span><span id="total">$0</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <input id="coupon" placeholder="Cupón: ECATECH10" style="flex:1;padding:10px;border-radius:10px;background:#0a1028;border:1px solid rgba(255,255,255,.12);color:var(--text)">
+        <button class="btn" id="applyCoupon">Aplicar</button>
+      </div>
+      <button id="checkoutBtn" class="btn primary" style="width:100%;margin-top:10px">Continuar al checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <dialog id="checkoutModal">
+    <div class="modal-header">
+      <strong>Finalizar compra</strong>
+      <button class="btn ghost" id="closeModal">✖</button>
+    </div>
+    <form id="checkoutForm">
+      <div class="modal-body">
+        <div class="fields">
+          <input required name="name" placeholder="Nombre completo" />
+          <input required type="email" name="email" placeholder="Correo" value="ventas@ecatech.bo" />
+          <input required name="phone" placeholder="Teléfono" value="60576075" />
+          <input required name="city" placeholder="Ciudad" />
+          <textarea required name="address" placeholder="Dirección de entrega"></textarea>
+        </div>
+        <p class="meta" style="margin-top:12px">Se enviará un resumen del pedido a tu WhatsApp y correo.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn ghost" id="cancelCheckout">Cancelar</button>
+        <button class="btn primary" type="submit">Confirmar y enviar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Toast + WhatsApp float -->
+  <a id="waFloat" class="whats" target="_blank">WhatsApp</a>
+  <div id="toast" class="glass" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:10px 14px;opacity:0;transition:.25s;pointer-events:none">OK</div>
+
+  <footer class="container" style="padding-bottom:40px">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div>© <span id="year"></span> ECA TECH. Todos los derechos reservados.</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap" class="meta">
+        <span>📞 60576075</span>
+        <span>✉️ ventas@ecatech.bo</span>
+        <a href="https://www.tiktok.com/@ECA_tech" target="_blank">TikTok</a>
+        <a href="https://instagram.com/eca2025tech" target="_blank">Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ====== Datos de productos con "imágenes" (SVG embebidas) ======
+    const IMG_NOTE = `data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><rect width='100%' height='100%' fill='%23070d22'/><rect x='120' y='120' rx='14' width='560' height='300' fill='%230b153e' stroke='%2300e5ff' stroke-width='8'/><rect x='140' y='150' width='520' height='180' fill='url(%23g)'/><rect x='260' y='430' width='280' height='10' fill='%232bff95'/><defs><linearGradient id='g'><stop offset='0' stop-color='%2300e5ff'/><stop offset='1' stop-color='%237a5cff'/></linearGradient></defs></svg>`;
+    const IMG_DESK = `data:image/svg+xml;utf8,<?xml version='1.0'?><svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'><rect width='100%' height='100%' fill='%23070d22'/><rect x='120' y='90' rx='12' width='420' height='260' fill='none' stroke='%23cfe0ff' stroke-width='8'/><rect x='580' y='110' rx='12' width='100' height='220' fill='none' stroke='%2300e5ff' stroke-width='8'/><circle cx='630' cy='300' r='10' fill='%232bff95'/><rect x='160' y='380' width='360' height='12' fill='%237a5cff'/></svg>`;
+
+    const PRODUCTS = [
+      {id:'nb-lenovo-1', name:'Lenovo IdeaPad 3 15"', brand:'Lenovo', category:'Notebook', cpu:'Intel i5-12450H', gpu:'Intel Iris Xe', ram:16, storage:'512GB SSD', price:699, tags:['office','estudiante'], img:IMG_NOTE},
+      {id:'nb-asus-1', name:'ASUS TUF A15', brand:'ASUS', category:'Notebook', cpu:'Ryzen 7 7840HS', gpu:'RTX 4060', ram:16, storage:'1TB SSD', price:1399, tags:['gaming'], badge:'Nuevo', img:IMG_NOTE},
+      {id:'dt-eca-1', name:'ECA Desktop Pro', brand:'ECA', category:'Desktop', cpu:'Intel i7-12700F', gpu:'RTX 4070', ram:32, storage:'1TB SSD', price:1899, tags:['gaming','creator'], badge:'Top Ventas', img:IMG_DESK},
+      {id:'nb-hp-1', name:'HP 245 G9 14"', brand:'HP', category:'Notebook', cpu:'Ryzen 5 5500U', gpu:'Integrados', ram:8, storage:'256GB SSD', price:529, tags:['office','estudiante'], img:IMG_NOTE},
+      {id:'dt-acer-1', name:'Acer Aspire XC', brand:'Acer', category:'Desktop', cpu:'Intel i3-13100', gpu:'UHD 730', ram:16, storage:'512GB SSD', price:629, tags:['office'], img:IMG_DESK},
+      {id:'nb-asus-2', name:'ASUS ROG Zephyrus G16', brand:'ASUS', category:'Notebook', cpu:'Intel i9-14900H', gpu:'RTX 4080', ram:32, storage:'1TB SSD', price:2699, tags:['gaming','creator'], img:IMG_NOTE}
+    ];
+
+    // ====== Estado ======
+    const state = { q:'', category:'', brand:'', sort:'featured', tags:new Set(), cart: JSON.parse(localStorage.getItem('cart')||'[]'), coupon:null };
+    const $ = (s,root=document)=>root.querySelector(s); const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+    const money = v => new Intl.NumberFormat('es-BO',{style:'currency',currency:'USD'}).format(v);
+
+    function saveCart(){ localStorage.setItem('cart', JSON.stringify(state.cart)); updateCartBadge(); }
+    function updateCartBadge(){ $('#cartCount').textContent = state.cart.reduce((a,it)=>a+it.qty,0); }
+
+    function productCard(p){
+      return `
+      <div class="glass product">
+        <div class="thumb">${p.img?`<img alt="${p.name}" src="${p.img}">`:''}</div>
+        <h4>${p.name}</h4>
+        <div class="meta">${p.brand} • ${p.cpu} • ${p.gpu} • ${p.ram}GB RAM • ${p.storage}</div>
+        <div class="kpis">${p.tags.map(t=>`<span class='pill'>${t}</span>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="price">${money(p.price)}</div>
+          <button class="btn primary" data-add="${p.id}">Agregar</button>
+        </div>
+      </div>`;
+    }
+
+    function attachAddButtons(){ $$('[data-add]').forEach(btn=> btn.addEventListener('click',()=>{ const id=btn.dataset.add; const p=PRODUCTS.find(x=>x.id===id); const ex=state.cart.find(x=>x.id===id); ex? ex.qty++: state.cart.push({id:p.id,name:p.name,price:p.price,qty:1}); saveCart(); toast('Agregado al carrito'); })); }
+
+    function apply(){
+      const q = state.q.trim().toLowerCase();
+      let items = PRODUCTS.filter(p=> (!state.category || p.category===state.category) && (!state.brand || p.brand===state.brand) && (state.tags.size===0 || [...state.tags].every(t=>p.tags.includes(t))) && (q==='' || [p.name,p.brand,p.cpu,p.gpu,`${p.ram}gb`,p.storage].some(v=>String(v).toLowerCase().includes(q))) );
+      if(state.sort==='price-asc') items.sort((a,b)=>a.price-b.price);
+      if(state.sort==='price-desc') items.sort((a,b)=>b.price-a.price);
+      if(state.sort==='name-asc') items.sort((a,b)=>a.name.localeCompare(b.name));
+      $('#count').textContent = items.length + ' resultados';
+      $('#productList').innerHTML = items.map(productCard).join('');
+      attachAddButtons();
+    }
+
+    // ====== Carrito ======
+    function openCart(){ $('#drawer').classList.add('open'); }
+    function closeCart(){ $('#drawer').classList.remove('open'); }
+
+    function renderCart(){
+      const box = $('#cartItems'); box.innerHTML = '';
+      if(state.cart.length===0){ box.innerHTML = '<p class="meta">Tu carrito está vacío.</p>'; updateTotals(); return; }
+      state.cart.forEach(it=>{
+        const row = document.createElement('div'); row.className='cart-item';
+        row.innerHTML = `
+          <div class="thumb"><img alt="thumb" src='${IMG_NOTE}'/></div>
+          <div><div style="font-weight:700">${it.name}</div><div class="meta">${money(it.price)}</div></div>
+          <div class="qty">
+            <button data-dec="${it.id}">-</button>
+            <span>${it.qty}</span>
+            <button data-inc="${it.id}">+</button>
+            <button data-rem="${it.id}" title="Quitar" style="margin-left:8px">🗑️</button>
+          </div>`;
+        box.appendChild(row);
+      });
+      box.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click',()=>{ const it=state.cart.find(x=>x.id===b.dataset.inc); it.qty++; saveCart(); renderCart(); }));
+      box.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click',()=>{ const it=state.cart.find(x=>x.id===b.dataset.dec); it.qty=Math.max(1,it.qty-1); saveCart(); renderCart(); }));
+      box.querySelectorAll('[data-rem]').forEach(b=>b.addEventListener('click',()=>{ state.cart = state.cart.filter(x=>x.id!==b.dataset.rem); saveCart(); renderCart(); }));
+      updateTotals();
+    }
+
+    function updateTotals(){
+      const subtotal = state.cart.reduce((a,it)=>a+it.price*it.qty,0);
+      const shipping = subtotal>1000?0:25;
+      const discount = state.coupon==='ECATECH10' ? subtotal*0.10 : 0;
+      const total = Math.max(0, subtotal + shipping - discount);
+      $('#subtotal').textContent = money(subtotal);
+      $('#shipping').textContent = money(shipping);
+      $('#discount').textContent = discount?`- ${money(discount)}`:'$0';
+      $('#total').textContent = money(total);
+    }
+
+    // ====== Checkout por WhatsApp ======
+    const PHONE = '59160576075';
+    function sendWhatsapp(text){ const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`; window.open(url, '_blank'); }
+
+    $('#checkoutForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      const items = state.cart.map(it=>`• ${it.name} x${it.qty} — ${money(it.price*it.qty)}`).join('%0A');
+      const subtotal = state.cart.reduce((a,it)=>a+it.price*it.qty,0);
+      const shipping = subtotal>1000?0:25; const discount = (state.coupon==='ECATECH10')? subtotal*0.10 : 0; const total = subtotal + shipping - discount;
+      const text = `Hola ECA TECH, quiero confirmar mi pedido:%0A%0A${items||'— Sin items —'}%0A%0ASubtotal: ${money(subtotal)}%0AEnvío: ${money(shipping)}%0ADescuento: ${discount?money(discount):'$0'}%0ATOTAL: ${money(total)}%0A%0ADatos:%0ANombre: ${data.name}%0ACorreo: ${data.email}%0ATeléfono: ${data.phone}%0ACiudad: ${data.city}%0ADirección: ${data.address}`;
+      sendWhatsapp(text);
+      toast('Pedido enviado a WhatsApp');
+      $('#checkoutModal').close(); state.cart=[]; saveCart(); renderCart(); updateTotals();
+    });
+
+    // ====== Cotización por WhatsApp ======
+    $('#quoteForm')?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target).entries());
+      const text = `Hola ECA TECH, quiero una cotización:%0A%0AUso: ${d.uso}%0APresupuesto: ${d.presupuesto}%0ANombre: ${d.nombre}%0ATeléfono: ${d.telefono}%0AExtras: ${d.extras||'-'}`;
+      sendWhatsapp(text);
+      toast('Cotización enviada por WhatsApp'); e.target.reset();
+    });
+
+    // ====== Interacciones ======
+    function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.opacity=1; setTimeout(()=>t.style.opacity=0, 2200); }
+    function bind(){
+      $('#q').addEventListener('input', e=>{ state.q=e.target.value; apply(); });
+      $('#category').addEventListener('change', e=>{ state.category=e.target.value; apply(); });
+      $('#brand').addEventListener('change', e=>{ state.brand=e.target.value; apply(); });
+      $('#sort').addEventListener('change', e=>{ state.sort=e.target.value; apply(); });
+      $$('.chip').forEach(ch=> ch.addEventListener('click',()=>{ const t=ch.dataset.tag; ch.classList.toggle('active'); ch.classList.contains('active')? state.tags.add(t) : state.tags.delete(t); apply(); }));
+      $('#openCart').addEventListener('click', ()=>{ renderCart(); openCart(); });
+      $('#closeCart').addEventListener('click', closeCart);
+      $('#checkoutBtn').addEventListener('click', ()=>{ if(state.cart.length===0){ toast('Agrega productos antes de comprar'); return; } $('#checkoutModal').showModal(); });
+      $('#openCheckout').addEventListener('click', ()=>{ if(state.cart.length===0){ toast('Agrega productos antes de comprar'); return; } $('#checkoutModal').showModal(); });
+      $('#applyCoupon').addEventListener('click', ()=>{ state.coupon = ($('#coupon').value||'').toUpperCase().trim(); updateTotals(); toast(state.coupon==='ECATECH10'?'Cupón aplicado':'Cupón no válido'); });
+      $('#waFloat').addEventListener('click', (e)=>{ e.preventDefault(); sendWhatsapp('Hola ECA TECH, necesito ayuda 👍'); });
+    }
+
+    // ====== Init ======
+    $('#year').textContent = new Date().getFullYear();
+    $('#waFloat').href = `https://wa.me/${PHONE}`;
+    bind(); apply(); updateCartBadge();
+  </script>
+</body>
+</html>
